@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-        val alreadySignedIn = googleAccount != null
+        val alreadySignedIn = googleAccount != null && googleAccount.idToken != null
         if(!alreadySignedIn) {
             startActivity(Intent(this, LoginActivity::class.java))
         }

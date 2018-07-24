@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.ApiException
 class LoginActivity : AppCompatActivity() {
     companion object {
         const val googleSignInCode = 0
+        const val googleSignInClientId= "1086340439638-hdj6trfcvceup2k361prj1ibd2mssrl9.apps.googleusercontent.com"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val googleSignIn = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(googleSignInClientId)
                 .requestEmail()
                 .build()
         val googleSignInClient = GoogleSignIn.getClient(this, googleSignIn)
@@ -49,9 +51,8 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val googleAccount =
                         GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException::class.java)
-                print("Hi")
             } catch (exception: ApiException){
-                print("Bye")
+                print("Error signing in")
             }
         }
     }
