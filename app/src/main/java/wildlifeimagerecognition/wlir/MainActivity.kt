@@ -7,9 +7,9 @@ import android.view.MenuItem
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -79,7 +79,10 @@ class MainActivity : AppCompatActivity() {
             val job = async(CommonPool) {
                 connection.connect()
                 val input = connection.inputStream
-                profilePic = BitmapDrawable(resources, BitmapFactory.decodeStream(input))
+                val bitmap = BitmapFactory.decodeStream(input)
+                val drawable =
+                    RoundedBitmapDrawableFactory.create(resources, bitmap)
+                profilePic = drawable
                 invalidateOptionsMenu()
             }
             job.await()
