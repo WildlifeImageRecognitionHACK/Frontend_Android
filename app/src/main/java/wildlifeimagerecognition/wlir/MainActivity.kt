@@ -68,10 +68,6 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(Intent(this, SignInActivity::class.java), signInResult)
     }
 
-    private fun setMenu(){
-        invalidateOptionsMenu()
-    }
-
     private fun getProfilePicAsync() = async(UI){
         val connection = URL(googleAccount!!.photoUrl.toString()).openConnection()
 
@@ -82,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                 val bitmap = BitmapFactory.decodeStream(input)
                 val drawable =
                     RoundedBitmapDrawableFactory.create(resources, bitmap)
+                drawable.cornerRadius = Math.max(bitmap.width, bitmap.height) / 1.0f
                 profilePic = drawable
                 invalidateOptionsMenu()
             }
@@ -103,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                         GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
                                 .signOut().addOnCompleteListener {
                                     googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-                                    setMenu()
+                                    promptLogin()
                     }
                 } catch (exception: Exception){
                     print("Error signing out")

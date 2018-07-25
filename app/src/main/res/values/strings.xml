@@ -4,4 +4,9 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
     <string name="more_options">More sign in options to come</string>
+    <string name="animal">Animal</string>
+    <string name="human">Human</string>
+    <string name="neither">Neither</string>
+    <string name="confirm">Confirm</string>
+    <string name="lion">lion</string>
 </resources>

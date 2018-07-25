@@ -27,6 +27,7 @@ class SignInActivity : AppCompatActivity() {
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val googleSignIn = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(googleSignInClientId)
+                .requestProfile()
                 .requestEmail()
                 .build()
         val googleSignInClient = GoogleSignIn.getClient(this, googleSignIn)
