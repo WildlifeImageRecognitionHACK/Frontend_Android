@@ -1,17 +1,15 @@
 package wildlifeimagerecognition.wlir
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.Task
-import android.content.Intent
 import com.google.android.gms.common.api.ApiException
 
 
-class LoginActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity() {
     companion object {
         const val googleSignInCode = 0
         const val googleSignInClientId= "1086340439638-hdj6trfcvceup2k361prj1ibd2mssrl9.apps.googleusercontent.com"
@@ -19,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_signin)
 
         googleSignInSetup()
     }
@@ -49,11 +47,12 @@ class LoginActivity : AppCompatActivity() {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             try {
-                val googleAccount =
-                        GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException::class.java)
+                GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException::class.java)
+                finish()
             } catch (exception: ApiException){
                 print("Error signing in")
             }
         }
     }
+
 }
