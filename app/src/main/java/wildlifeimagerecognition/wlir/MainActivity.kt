@@ -80,13 +80,13 @@ class MainActivity : AppCompatActivity() {
                     RoundedBitmapDrawableFactory.create(resources, bitmap)
                 drawable.cornerRadius = Math.max(bitmap.width, bitmap.height) / 1.0f
                 profilePic = drawable
-                invalidateOptionsMenu()
             }
             job.await()
         } catch (exception: Exception){
             print(exception)
             // TODO: need a placeholder
         }
+        invalidateOptionsMenu()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                         GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
                                 .signOut().addOnCompleteListener {
                                     googleAccount = GoogleSignIn.getLastSignedInAccount(this)
+                                    profilePic = null
                                     promptLogin()
                     }
                 } catch (exception: Exception){

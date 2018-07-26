@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#92C83E</color>
-    <color name="colorPrimaryDark">#6DA42C</color>
+    <color name="primary">#92C83E</color>
+    <color name="primaryDark">#6DA42C</color>
+    <color name="primaryLight">#CAE4A1</color>
+    <color name="secondary">#6478D3</color>
+    <color name="secondaryDark">#4157C0</color>
+    <color name="secondaryLight">#EAECF9</color>
+    <color name="button_bg">#AAAAAAAA</color>
 </resources>

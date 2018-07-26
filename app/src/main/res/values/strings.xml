@@ -9,4 +9,6 @@
     <string name="neither">Neither</string>
     <string name="confirm">Confirm</string>
     <string name="lion">lion</string>
+    <string name="animal_to_identify">Animal to identify</string>
+    <string name="classification">Classification</string>
 </resources>

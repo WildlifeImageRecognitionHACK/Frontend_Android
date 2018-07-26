@@ -5,28 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main_container"
+    android:background="@drawable/plants"
+    android:backgroundTint="@color/secondaryLight"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/animal_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:srcCompat="@mipmap/bunny"
-        app:layout_constraintBottom_toTopOf="@id/button_linear_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="24dp"
+        android:contentDescription="@string/animal_to_identify"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/mid_height_guide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/bunny" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/mid_height_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@id/button_linear_layout"
+        app:layout_constraintTop_toBottomOf="@id/animal_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <TextView
+        android:id="@+id/label_classification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/rubik_regular"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="8dp"
+        android:text="@string/classification"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mid_height_guide" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/animal_image"
+        app:layout_constraintTop_toBottomOf="@id/label_classification"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/button_linear_layout">
