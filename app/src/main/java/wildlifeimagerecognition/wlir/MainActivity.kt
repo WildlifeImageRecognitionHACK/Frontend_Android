@@ -10,9 +10,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import android.widget.ImageView
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import java.net.URL
 
 
@@ -61,7 +63,25 @@ class MainActivity : AppCompatActivity() {
         googleAccount = GoogleSignIn.getLastSignedInAccount(this)
         if(googleAccount?.idToken == null) {
             promptLogin()
+        } else{
+           getPhoto()
         }
+    }
+
+    private fun getPhoto() {
+        val session = WlirSession()
+        launch {
+            session.retrievePhotoInfo().await()
+            updateUi(session)
+        }
+        session.waiting()
+    }
+
+    private fun updateUi(session: WlirSession) {
+        val animalImage = findViewById<ImageView>(R.id.animal_image)
+
+        // update UI on main thread
+        this@MainActivity.runOnUiThread { animalImage.setImageBitmap(session.imageBits)}
     }
 
     private fun promptLogin() {
@@ -115,6 +135,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == signInResult){
             invalidateOptionsMenu()
+            getPhoto()
         }
     }
 }

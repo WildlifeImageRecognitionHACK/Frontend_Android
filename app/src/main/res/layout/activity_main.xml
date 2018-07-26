@@ -50,14 +50,14 @@
         app:layout_constraintTop_toBottomOf="@id/mid_height_guide" />
 
     <LinearLayout
+        android:id="@+id/button_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/label_classification"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/button_linear_layout">
+        app:layout_constraintTop_toBottomOf="@id/label_classification">
 
         <TextView
             android:id="@+id/label_animal"
@@ -76,6 +76,14 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/filler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/button_confirm"
+        app:layout_constraintTop_toBottomOf="@id/button_linear_layout" />
+
     <Button
         android:id="@+id/button_confirm"
         android:layout_width="match_parent"
@@ -84,12 +92,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_weight="1"
-        android:text="@string/confirm"
         android:background="@drawable/rounded_button_bg"
         android:backgroundTint="@color/primaryDark"
         android:fontFamily="@font/rubik_medium"
+        android:text="@string/confirm"
         android:textColor="@color/primaryLight"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
