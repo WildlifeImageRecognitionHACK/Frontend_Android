@@ -61,12 +61,12 @@
 
         <TextView
             android:id="@+id/label_animal"
-            style="@style/label_buttons"
+            style="@style/label_buttons.unselected"
             android:text="@string/animal" />
 
         <TextView
             android:id="@+id/label_human"
-            style="@style/label_buttons"
+            style="@style/label_buttons.selected"
             android:text="@string/human" />
 
         <TextView
@@ -78,13 +78,17 @@
 
     <Button
         android:id="@+id/button_confirm"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:text="@string/confirm"
+        android:background="@drawable/rounded_button_bg"
+        android:backgroundTint="@color/primaryDark"
+        android:fontFamily="@font/rubik_medium"
+        android:textColor="@color/primaryLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

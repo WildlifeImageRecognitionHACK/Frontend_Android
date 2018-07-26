@@ -6,5 +6,9 @@
     <color name="secondary">#6478D3</color>
     <color name="secondaryDark">#4157C0</color>
     <color name="secondaryLight">#EAECF9</color>
-    <color name="button_bg">#AAAAAAAA</color>
+    <color name="button_bg">#FFFFFF</color>
+    <color name="button_bg_transparent">#66FFFFFF</color>
+    <!-- Should be same as button_bg but with alpha value -->
+    <color name="greyLight">#AAAAAA</color>
+    <color name="greyDark">#707070</color>
 </resources>

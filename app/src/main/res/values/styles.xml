@@ -14,9 +14,17 @@
         <item name="android:textAlignment">center</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:background">@drawable/rounded_button_bg</item>
-        <item name="android:backgroundTint">@color/primaryLight</item>
+        <item name="android:background">@drawable/rounded_button_bg_transparent</item>
         <item name="android:fontFamily">@font/rubik_medium</item>
+    </style>
+
+    <style name="label_buttons.unselected" parent="label_buttons">
+        <item name="android:backgroundTint">@color/greyLight</item>
+        <item name="android:textColor">@color/greyDark</item>
+    </style>
+
+    <style name="label_buttons.selected" parent="label_buttons">
+        <item name="android:backgroundTint">@color/primaryLight</item>
         <item name="android:textColor">@color/primaryDark</item>
     </style>
 
