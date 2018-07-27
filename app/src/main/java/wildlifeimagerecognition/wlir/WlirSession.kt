@@ -1,11 +1,7 @@
 package wildlifeimagerecognition.wlir
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.support.v7.app.AppCompatActivity
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import kotlinx.coroutines.experimental.*
@@ -15,9 +11,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class WlirSession {
-    private lateinit var label: String
-    private lateinit var imageId: String
-    private lateinit var imageLink: String
+    internal lateinit var imageLabel: String
+    internal lateinit var imageId: String
+    internal lateinit var imageLink: String
     lateinit var imageBits: Bitmap
 
     companion object {
@@ -31,12 +27,11 @@ class WlirSession {
         val imageJson: JsonObject? = restRequestJson("images").await()
 
         imageJson?.let {
-            label = imageJson[jsonImageLabel].toString()
+            imageLabel = imageJson[jsonImageLabel].toString()
             imageId = imageJson[jsonImageId].toString()
             imageLink = imageJson[jsonImageLink].toString()
         }
 
-        imageLink = "https://placekitten.com/600/400" // Test
         imageBits = retrievePhoto().await()
     }
 
@@ -58,8 +53,6 @@ class WlirSession {
     }
 
     private fun restRequestJson(uri: String): Deferred<JsonObject?> = async(CommonPool) {
-        return@async null
-
         val connection: HttpURLConnection =
             URL(listOf("http:", "", domain, uri).reduce { acc, s -> "$acc/$s" }).openConnection()
                 as HttpURLConnection

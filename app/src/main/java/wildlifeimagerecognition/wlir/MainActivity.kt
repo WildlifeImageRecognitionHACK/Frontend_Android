@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.widget.ImageView
+import android.widget.TextView
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -80,8 +81,31 @@ class MainActivity : AppCompatActivity() {
     private fun updateUi(session: WlirSession) {
         val animalImage = findViewById<ImageView>(R.id.animal_image)
 
+        setCategoryHighlight(session.imageLabel)
+
         // update UI on main thread
-        this@MainActivity.runOnUiThread { animalImage.setImageBitmap(session.imageBits)}
+        this@MainActivity.runOnUiThread {
+            animalImage.setImageBitmap(session.imageBits)
+        }
+    }
+
+    private fun setCategoryHighlight(label: String) {
+        val labels = listOf(R.id.label_animal, R.id.label_human, R.id.label_neither)
+        val views = labels.map { findViewById<TextView>(it) }
+
+        views.map { unSelect(it) }
+
+        val animalLabel = findViewById<TextView>(R.id.label_animal)
+        val humanLabel = findViewById<TextView>(R.id.label_human)
+        val neitherLabel = findViewById<TextView>(R.id.label_neither)
+    }
+
+    private fun unSelect(textView: TextView): Any {
+        this@MainActivity.runOnUiThread {
+            textView.backgroundTintList = getColorStateList(R.color.greyLight)
+            textView.setTextColor(getColor(R.color.greyDark))
+        }
+        return textView
     }
 
     private fun promptLogin() {
