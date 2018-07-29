@@ -10,6 +10,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.View
 import android.widget.TextView
@@ -27,7 +29,13 @@ class MainActivity : AppCompatActivity() {
         var googleAccount: GoogleSignInAccount? = null
         var profilePic: Drawable? = null
         const val signInResult = 0
+        private var currentSession: WlirSession? = null
     }
+
+    private fun signedIn(account: GoogleSignInAccount?) = account?.idToken != null
+
+    private fun categoryFromString(label: String): Int =
+            resources.getIdentifier("category_$label".toLowerCase(), "id", packageName)
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -56,7 +64,9 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun signedIn(account: GoogleSignInAccount?) = account?.idToken != null
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
+    }
 
     override fun onResume() {
         super.onResume()
@@ -68,19 +78,73 @@ class MainActivity : AppCompatActivity() {
         if(googleAccount?.idToken == null) {
             promptLogin()
         } else{
-           getPhoto()
+            currentSession = nextSession()
         }
     }
 
-    private fun getPhoto() {
-        val session = WlirSession()
-        val animalImage: GifImageView = animal_image
-        animalImage.setImageResource(R.mipmap.loading)
-        launch {
-            session.retrievePhotoInfo().await()
-            updateUi(session)
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.action_sign_in -> {
+                promptLogin()
+            }
+
+            R.id.action_sign_out -> {
+                try {
+                    GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .signOut().addOnCompleteListener {
+                                googleAccount = GoogleSignIn.getLastSignedInAccount(this)
+                                profilePic = null
+                                promptLogin()
+                            }
+                } catch (exception: Exception){
+                    print("Error signing out")
+                }
+            }
         }
-        session.waiting()
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == signInResult){
+            invalidateOptionsMenu()
+            onResume()
+        }
+    }
+
+    private fun promptLogin() {
+        startActivityForResult(Intent(this, SignInActivity::class.java), signInResult)
+    }
+
+    private fun getProfilePicAsync() = async(UI){
+        val connection = URL(googleAccount!!.photoUrl.toString()).openConnection()
+
+        try {
+            val job = async(CommonPool) {
+                connection.connect()
+                val input = connection.inputStream
+                val bitmap = BitmapFactory.decodeStream(input)
+                val drawable =
+                        RoundedBitmapDrawableFactory.create(resources, bitmap)
+                drawable.cornerRadius = Math.max(bitmap.width, bitmap.height) / 1.0f
+                profilePic = drawable
+            }
+            job.await()
+        } catch (exception: Exception){
+            print(exception)
+            // TODO: need a placeholder
+        }
+        invalidateOptionsMenu()
+    }
+
+    private fun nextSession(): WlirSession {
+        val newSession = WlirSession()
+        launch {
+            newSession.retrievePhotoInfo().await()
+            updateUi(newSession)
+        }
+        animal_image.setImageResource(R.mipmap.loading)
+        return newSession
     }
 
     private fun updateUi(session: WlirSession) {
@@ -95,9 +159,6 @@ class MainActivity : AppCompatActivity() {
             animalImage.setImageBitmap(bitmap)
         }
     }
-
-    private fun categoryFromString(label: String): Int =
-            resources.getIdentifier("category_$label".toLowerCase(), "id", packageName)
 
     private fun selectCategory(categoryId: Int){
         val button = findViewById<TextView>(categoryId)
@@ -122,58 +183,12 @@ class MainActivity : AppCompatActivity() {
         selectCategory(view.id)
     }
 
-    private fun promptLogin() {
-        startActivityForResult(Intent(this, SignInActivity::class.java), signInResult)
+    fun confirmCategory(view: View){
+        postNewLabel()
+        currentSession = nextSession()
     }
 
-    private fun getProfilePicAsync() = async(UI){
-        val connection = URL(googleAccount!!.photoUrl.toString()).openConnection()
-
-        try {
-            val job = async(CommonPool) {
-                connection.connect()
-                val input = connection.inputStream
-                val bitmap = BitmapFactory.decodeStream(input)
-                val drawable =
-                    RoundedBitmapDrawableFactory.create(resources, bitmap)
-                drawable.cornerRadius = Math.max(bitmap.width, bitmap.height) / 1.0f
-                profilePic = drawable
-            }
-            job.await()
-        } catch (exception: Exception){
-            print(exception)
-            // TODO: need a placeholder
-        }
-        invalidateOptionsMenu()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
-            R.id.action_sign_in -> {
-                promptLogin()
-            }
-
-            R.id.action_sign_out -> {
-                try {
-                        GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                .signOut().addOnCompleteListener {
-                                    googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-                                    profilePic = null
-                                    promptLogin()
-                    }
-                } catch (exception: Exception){
-                    print("Error signing out")
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == signInResult){
-            invalidateOptionsMenu()
-            getPhoto()
-        }
+    private fun postNewLabel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

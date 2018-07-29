@@ -78,8 +78,4 @@ class WlirSession {
             throw exception
         }
     }
-
-    fun waiting() {
-        // TODO: show loading animation
-    }
 }

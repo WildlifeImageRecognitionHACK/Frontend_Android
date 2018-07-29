@@ -97,6 +97,7 @@
         android:fontFamily="@font/rubik_medium"
         android:text="@string/confirm"
         android:textColor="@color/primaryLight"
+        android:onClick="confirmCategory"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filler"
         app:layout_constraintEnd_toEndOf="parent"
