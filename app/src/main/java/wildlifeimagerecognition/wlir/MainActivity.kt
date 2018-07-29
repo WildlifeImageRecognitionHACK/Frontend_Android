@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUi(session: WlirSession) {
         setAnimalImage(session.imageBits)
-        selectCategory(categoryFromString(session.imageLabel))
+        selectCategory(categoryFromString(session.currentImageLabel))
     }
 
     private fun setAnimalImage(bitmap: Bitmap) {
@@ -184,11 +184,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun confirmCategory(view: View){
-        postNewLabel()
-        currentSession = nextSession()
-    }
-
-    private fun postNewLabel() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        launch{
+            currentSession?.postNewLabel()
+        }
+        nextSession()
     }
 }

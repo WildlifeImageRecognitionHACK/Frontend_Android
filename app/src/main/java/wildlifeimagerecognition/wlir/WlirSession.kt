@@ -11,9 +11,10 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class WlirSession {
-    internal lateinit var imageLabel: String
-    internal lateinit var imageId: String
-    internal lateinit var imageLink: String
+    internal lateinit var originalImageLabel: String
+    internal lateinit var currentImageLabel: String
+    private lateinit var imageId: String
+    private lateinit var imageLink: String
     lateinit var imageBits: Bitmap
 
     companion object {
@@ -30,15 +31,48 @@ class WlirSession {
     }
 
     fun retrievePhotoInfo() = async(UI){
-        val imageJson: JsonObject? = restRequestJson("images").await()
+        val imageJson = restRequestJson(createJsonRequest("GET", "images")).await()
 
         imageJson?.let {
-            imageLabel = imageJson[jsonImageLabel].toString()
+            originalImageLabel = imageJson[jsonImageLabel].toString()
+            currentImageLabel = originalImageLabel
             imageId = imageJson[jsonImageId].toString()
             imageLink = imageJson[jsonImageLink].toString()
         }
 
         imageBits = retrievePhoto().await()
+    }
+
+    fun postNewLabel() = async(UI){
+        val postRequest = createJsonRequest("POST", "new_label")
+        postRequest.setRequestProperty(jsonImageId, imageId)
+        postRequest.setRequestProperty("newLabel", currentImageLabel)
+        postRequest.setRequestProperty("originalLabel", originalImageLabel)
+
+        restRequestJson(postRequest).await()
+    }
+
+    private fun restRequestJson(connection: HttpURLConnection): Deferred<JsonObject?> = async(CommonPool) {
+        try {
+            lateinit var infoJson: JsonObject
+            val job = async(CommonPool) {
+                connection.connect()
+                val stream: InputStream = connection.inputStream
+                infoJson = Parser().parse(stream) as JsonObject
+            }
+            job.await()
+            return@async infoJson
+        } catch (exception: Exception){
+            throw exception
+        }
+    }
+
+    private fun createJsonRequest(method: String, uri: String): HttpURLConnection {
+        val connection: HttpURLConnection =
+                URL(listOf("http:", "", domain, uri).reduce { acc, s -> "$acc/$s" }).openConnection()
+                        as HttpURLConnection
+        connection.requestMethod = method
+        return connection
     }
 
     private fun retrievePhoto(): Deferred<Bitmap> = async(CommonPool) {
@@ -53,27 +87,6 @@ class WlirSession {
             }
             job.await()
             return@async bitmap
-        } catch (exception: Exception){
-            throw exception
-        }
-    }
-
-    private fun restRequestJson(uri: String): Deferred<JsonObject?> = async(CommonPool) {
-        val connection: HttpURLConnection =
-            URL(listOf("http:", "", domain, uri).reduce { acc, s -> "$acc/$s" }).openConnection()
-                as HttpURLConnection
-        connection.requestMethod = "GET"
-
-        try {
-            lateinit var infoJson: JsonObject
-            val job = async(CommonPool) {
-                connection.connect()
-                val status = connection.responseCode
-                val stream: InputStream = connection.inputStream
-                infoJson = Parser().parse(stream) as JsonObject
-            }
-            job.await()
-            return@async infoJson
         } catch (exception: Exception){
             throw exception
         }
