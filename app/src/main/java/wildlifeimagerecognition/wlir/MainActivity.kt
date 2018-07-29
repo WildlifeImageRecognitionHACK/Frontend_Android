@@ -18,6 +18,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import kotlinx.android.synthetic.main.activity_main.*
+import pl.droidsonroids.gif.GifImageView
 import java.net.URL
 
 
@@ -73,6 +74,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun getPhoto() {
         val session = WlirSession()
+        val animalImage: GifImageView = animal_image
+        animalImage.setImageResource(R.mipmap.loading)
         launch {
             session.retrievePhotoInfo().await()
             updateUi(session)
@@ -86,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAnimalImage(bitmap: Bitmap) {
-        val animalImage = animal_image
+        val animalImage: GifImageView = animal_image
         // update UI on main thread
         this@MainActivity.runOnUiThread {
             animalImage.setImageBitmap(bitmap)
@@ -115,6 +118,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun categoryOnClick(view: View){
+        // In use in styles.xml
         selectCategory(view.id)
     }
 

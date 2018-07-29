@@ -9,7 +9,7 @@
     android:backgroundTint="@color/secondaryLight"
     tools:context=".MainActivity">
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/animal_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/bunny" />
+        android:src="@mipmap/loading" />
 
     <android.support.constraint.Guideline
         android:id="@+id/mid_height_guide"
