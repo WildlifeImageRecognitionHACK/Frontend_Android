@@ -17,10 +17,16 @@ class WlirSession {
     lateinit var imageBits: Bitmap
 
     companion object {
+        // List of all the categories
+        val labels = listOf(
+                R.id.category_animal,
+                R.id.category_human,
+                R.id.category_neither)
         const val domain = "wildlifeimagevm.westus2.cloudapp.azure.com:8080"
         const val jsonImageLabel = "imageLabel"
         const val jsonImageId = "imageId"
         const val jsonImageLink = "imageLink"
+
     }
 
     fun retrievePhotoInfo() = async(UI){

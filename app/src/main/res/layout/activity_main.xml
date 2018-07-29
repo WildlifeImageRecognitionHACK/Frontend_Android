@@ -60,17 +60,17 @@
         app:layout_constraintTop_toBottomOf="@id/label_classification">
 
         <TextView
-            android:id="@+id/label_animal"
-            style="@style/label_buttons.unselected"
+            android:id="@+id/category_animal"
+            style="@style/label_buttons"
             android:text="@string/animal" />
 
         <TextView
-            android:id="@+id/label_human"
-            style="@style/label_buttons.selected"
+            android:id="@+id/category_human"
+            style="@style/label_buttons"
             android:text="@string/human" />
 
         <TextView
-            android:id="@+id/label_neither"
+            android:id="@+id/category_neither"
             style="@style/label_buttons"
             android:text="@string/neither" />
 

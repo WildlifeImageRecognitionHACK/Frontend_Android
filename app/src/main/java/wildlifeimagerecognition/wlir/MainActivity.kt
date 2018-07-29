@@ -1,6 +1,7 @@
 package wildlifeimagerecognition.wlir
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -10,12 +11,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.widget.ImageView
+import android.view.View
 import android.widget.TextView
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import kotlinx.android.synthetic.main.activity_main.*
 import java.net.URL
 
 
@@ -79,33 +81,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUi(session: WlirSession) {
-        val animalImage = findViewById<ImageView>(R.id.animal_image)
+        setAnimalImage(session.imageBits)
+        selectCategory(categoryFromString(session.imageLabel))
+    }
 
-        setCategoryHighlight(session.imageLabel)
-
+    private fun setAnimalImage(bitmap: Bitmap) {
+        val animalImage = animal_image
         // update UI on main thread
         this@MainActivity.runOnUiThread {
-            animalImage.setImageBitmap(session.imageBits)
+            animalImage.setImageBitmap(bitmap)
         }
     }
 
-    private fun setCategoryHighlight(label: String) {
-        val labels = listOf(R.id.label_animal, R.id.label_human, R.id.label_neither)
-        val views = labels.map { findViewById<TextView>(it) }
+    private fun categoryFromString(label: String): Int =
+            resources.getIdentifier("category_$label".toLowerCase(), "id", packageName)
 
-        views.map { unSelect(it) }
+    private fun selectCategory(categoryId: Int){
+        val button = findViewById<TextView>(categoryId)
+        // TODO: Handle bad/missing labels
 
-        val animalLabel = findViewById<TextView>(R.id.label_animal)
-        val humanLabel = findViewById<TextView>(R.id.label_human)
-        val neitherLabel = findViewById<TextView>(R.id.label_neither)
-    }
-
-    private fun unSelect(textView: TextView): Any {
         this@MainActivity.runOnUiThread {
-            textView.backgroundTintList = getColorStateList(R.color.greyLight)
-            textView.setTextColor(getColor(R.color.greyDark))
+            button.backgroundTintList = getColorStateList(R.color.primaryLight)
+            button.setTextColor(getColor(R.color.primaryDark))
         }
-        return textView
+
+        WlirSession.labels.minus(categoryId).map{
+            val button = findViewById<TextView>(it)
+            this@MainActivity.runOnUiThread {
+                button.backgroundTintList = getColorStateList(R.color.greyLight)
+                button.setTextColor(getColor(R.color.greyDark))
+            }
+        }
+    }
+
+    fun categoryOnClick(view: View){
+        selectCategory(view.id)
     }
 
     private fun promptLogin() {

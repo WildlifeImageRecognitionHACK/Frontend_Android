@@ -9,23 +9,17 @@
 
     <style name="label_buttons">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textAlignment">center</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:background">@drawable/rounded_button_bg_transparent</item>
-        <item name="android:fontFamily">@font/rubik_medium</item>
-    </style>
-
-    <style name="label_buttons.unselected" parent="label_buttons">
         <item name="android:backgroundTint">@color/greyLight</item>
+        <item name="android:fontFamily">@font/rubik_medium</item>
         <item name="android:textColor">@color/greyDark</item>
-    </style>
-
-    <style name="label_buttons.selected" parent="label_buttons">
-        <item name="android:backgroundTint">@color/primaryLight</item>
-        <item name="android:textColor">@color/primaryDark</item>
+        <item name="android:clickable">true</item>
+        <item name="android:onClick">categoryOnClick</item>
     </style>
 
 </resources>
